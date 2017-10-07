@@ -1,0 +1,45 @@
+洗牌问题
+
+2017年10月7日
+16:21
+
+将random放的问题不同会引起不同的结果
+class Solution {
+    public int [] pre;
+    public int [] after;
+    public Random rdm;
+    public Solution(int[] nums) {
+        pre = new int[nums.length];
+        for (int i=0;i<nums.length;i++) pre[i]=nums[i];
+        rdm = new Random(System.currentTimeMillis());
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    public int[] reset() {
+         return pre;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    public int[] shuffle() {
+        if(pre==null) return null;
+        int len = pre.length;
+        int[] ans = pre.clone();
+        
+        Set<Integer> S = new HashSet<Integer>();
+        int a = 0;
+        for (int i=1;i<len;i++) {
+        	int j = rdm.nextInt(i+1);
+            int tmp=ans[i];
+            ans[i]=ans[j];
+            ans[j]=tmp;
+        }
+        return ans;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int[] param_1 = obj.reset();
+ * int[] param_2 = obj.shuffle();
+ */
