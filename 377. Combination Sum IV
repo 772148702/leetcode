@@ -1,0 +1,43 @@
+Given an integer array with all positive numbers and no duplicates, find the number of possible combinations that add up to a positive integer target.
+
+Example:
+
+nums = [1, 2, 3]
+target = 4
+
+The possible combination ways are:
+(1, 1, 1, 1)
+(1, 1, 2)
+(1, 2, 1)
+(1, 3)
+(2, 1, 1)
+(2, 2)
+(3, 1)
+
+Note that different sequences are counted as different combinations.
+
+Therefore the output is 7.
+最开始是用的dfs从底向上的搜索，也可以用从上往下的搜索，当然毫无疑问都会超时。
+但是从上向下的搜索更能够准确地定位信息，并且改写为记忆化搜索和递推。
+class Solution {
+    public int [] dp;
+    public int combinationSum4(int[] nums, int target) {
+        dp = new int [target+1];
+        for(int i=0;i<=target;i++) dp[i]=-1;
+        dp[0]=1;
+        dp(nums,target);
+        return dp[target];
+    }
+    
+    int dp(int []nums,int cnt) {
+        if(dp[cnt]!=-1) return dp[cnt];
+        dp[cnt]=0;
+        for(int i=0;i<nums.length;i++) {
+            if(cnt>=nums[i]) {
+                dp[cnt]+=dp(nums,cnt-nums[i]);
+            }
+        }
+        return dp[cnt];
+        
+    }
+}
