@@ -1,0 +1,68 @@
+Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum equals to k.
+
+Example 1:
+Input:nums = [1,1,1], k = 2
+Output: 2
+Note:
+The length of the array is in range [1, 20,000].
+The range of numbers in the array is [-1000, 1000] and the range of the integer k is [-1e7, 1e7].
+前缀和问题。
+class Solution {
+ public int subarraySum(int[] nums, int k) {
+		 Map<Integer,Integer> M = new HashMap<Integer,Integer>();
+         int sum=0;
+         M.put(sum,1);
+         if(nums==null) return 0;
+         int len = nums.length;
+         int ans = 0;
+         for (int i=0;i<len;i++) {
+             sum+=nums[i];
+             if(M.containsKey(sum-k)) {
+                 ans+=M.get(sum-k);
+             }
+             M.put(sum,M.getOrDefault(sum,0)+1);
+         }
+         return ans;
+	     
+	    }
+
+}
+
+
+用树状数组来暴力求解发现超时了,80个例子过了69个。
+树状数组地代码如下：
+class Solution {
+  	 int N;
+	 int [] c;
+	 int lowbit(int x) {
+		 return x&-x;
+	 }
+	 void add(int x,int val) {
+		 while(x<=N) {
+			 c[x]+=val;
+			 x+=lowbit(x);
+		 }
+	 }
+	 int getsum(int x) {
+		 int ans =0;
+		 while(x>0) {
+			 ans+=c[x];
+			 x-=lowbit(x);
+		 }
+		 return ans;
+	 }
+	 public int subarraySum(int[] nums, int k) {
+		 
+	        c = new int[nums.length+1];
+	        N = nums.length;
+	        int ans =0;
+	        for (int i=0;i<nums.length;i++) add(i+1,nums[i]);
+	        for(int i=0;i<nums.length;i++) 
+	        	for(int j=i;j<nums.length;j++) {
+	        		int hi=getsum(j+1);
+	        		int lo = getsum(i);
+	        		if(k==hi-lo) ans++;
+	        	}
+	        return ans;
+	    }
+}
