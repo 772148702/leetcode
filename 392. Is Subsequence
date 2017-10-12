@@ -1,0 +1,18 @@
+思路是一次线性的遍历t串，取最找出现的的对应与s串中的字母
+感觉写得还是很勉强啊。
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        if(s.equals("")) return true;
+        if(t.equals("")) return false;
+        int lo = 0;
+        for(int i=0;i<s.length();)
+        {
+            while(lo<t.length()&&t.charAt(lo++)!=s.charAt(i)) {}
+            if(lo>=t.length()&&t.charAt(lo-1)!=s.charAt(i))  return false;
+            i++;
+            if(i>=s.length()) break;
+                      
+        }
+        return true;
+    }
+}
