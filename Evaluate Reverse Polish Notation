@@ -1,0 +1,31 @@
+  逆波兰序，java中的Stack并不是一个抽象的类，可以由Stack直接实现，由peek,pop,push等方法。
+  public int evalRPN(String[] tokens) {
+        Stack<Integer> S = new Stack<Integer>();
+        int op1,op2;
+        for(String tmp:tokens) {
+            if(judge(tmp)) {
+                op2=S.pop();
+                op1=S.pop();
+                S.add(op(op1,op2,tmp));
+            } else {
+                S.push(Integer.valueOf(tmp));
+            }
+        }
+        return S.peek();
+      }
+    
+
+    public boolean judge(String tmp) {
+         String [] op= {"+","-","*","/"};
+         for(int i=0;i<op.length;i++) 
+             if(tmp.equals(op[i])) 
+            	 return true;
+         return false;
+    }
+    public int op(int op1,int op2,String tmp) {
+        if(tmp.equals("+")) return op1+op2;
+        if(tmp.equals("*")) return op1*op2;
+        if(tmp.equals("-")) return op1-op2;
+        if(tmp.equals("/")) return op1/op2;
+        return 1;
+    }
