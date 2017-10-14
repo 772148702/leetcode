@@ -1,0 +1,46 @@
+标准的dfs。
+class Solution {
+    List<String> tmp = new ArrayList<String>();
+    StringBuilder s = new StringBuilder();
+    String [] flag = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+    public List<String> letterCombinations(String digits) {
+        if(digits==null) return tmp;
+        if(digits.length()==0) return tmp;
+          f(digits,0);
+          return tmp;
+    }
+    
+    public void f(String digits,int lo)
+    {
+        if(lo==digits.length()) {
+            String h =s.toString();
+            String kk = new String(h);
+            tmp.add(kk);
+            return ;
+        } else {
+            String k = flag[digits.charAt(lo)-'0'];
+            for(int i=0;i<k.length();i++) {
+                s.append(k.charAt(i));
+                f(digits,lo+1);
+                s.deleteCharAt(s.length()-1);
+            }
+        }
+    }
+    
+}
+
+FIFO的写法
+    public List<String> letterCombinations(String digits) {
+    LinkedList<String> ans = new LinkedList<String>();
+    String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    ans.add("");
+    for(int i =0; i<digits.length();i++){
+        int x = Character.getNumericValue(digits.charAt(i));
+        while(ans.peek().length()==i){
+            String t = ans.remove();
+            for(char s : mapping[x].toCharArray())
+                ans.add(t+s);
+        }
+    }
+    return ans;
+}
