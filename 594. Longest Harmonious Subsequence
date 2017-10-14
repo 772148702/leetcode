@@ -1,0 +1,18 @@
+最初把题意给理解错了，后来发现就是一个简单的hash
+
+class Solution {
+    public int findLHS(int[] nums) {
+      Map<Integer,Integer> M = new HashMap<Integer,Integer>();
+        for(int tmp:nums) {
+            M.put(tmp,M.getOrDefault(tmp,0)+1);
+        }
+        int ans =0;
+        for(int h:M.keySet()) {
+            if(M.containsKey(h+1)) {
+                ans = Math.max(ans,M.get(h+1)+M.get(h));
+            }
+        }
+        return ans;
+    }
+    
+}
