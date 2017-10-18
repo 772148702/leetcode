@@ -1,0 +1,90 @@
+  class Solution {
+    public:
+        int largestRectangleArea(vector<int> &height) {
+            
+            int ret = 0;
+            height.push_back(0);
+            vector<int> index;
+            
+            for(int i = 0; i < height.size(); i++)
+            {
+                while(index.size() > 0 && height[index.back()] >= height[i])
+                {
+                    int h = height[index.back()];
+                    index.pop_back();
+                    
+                    int sidx = index.size() > 0 ? index.back() : -1;
+                    if(h * (i-sidx-1) > ret)
+                        ret = h * (i-sidx-1);
+                }
+                index.push_back(i);
+            }
+            
+            return ret;
+        }
+    };
+
+在构造函数里面申请堆超时。
+class Solution {
+ public:
+	  
+	 int *index, *le, *ri, *val, *kk;
+	 Solution() {
+		 int maxn = 100000;
+		 index = new int[maxn];
+		 le = new int[maxn];
+		 ri = new int[maxn];
+		 val = new int[maxn];
+		 kk = new int[maxn];
+	 }
+	 void build(int id, int lo, int hi) {
+		 if (lo == hi) {
+			 val[id] = kk[lo];
+			 le[id] = lo;
+			 ri[id] = lo;
+			 return;
+		 }
+		 le[id] = lo;
+		 ri[id] = hi;
+		 int mid = (lo + hi) / 2;
+		 build(id * 2, lo, mid);
+		 build(id * 2 + 1, mid + 1, hi);
+		 val[id] = min(val[id * 2], val[id * 2+1] );
+	 }
+	  int query(int id, int lo, int hi) {
+		 if (lo <= le[id] && ri[id] <= hi) {
+			 return val[id];
+		 }
+		 int mid = (le[id] + ri[id]) / 2;
+		 int a1, a2;
+		 if (mid >= hi) {
+			 a1 = query(id * 2, lo, hi);
+			 return a1;
+		 }
+		 if (mid < lo)
+		 {
+			 a2 = query(id * 2+1, lo, hi);
+			 return a2;
+		 }
+		 if (lo <= mid&&mid < hi) {
+			 return min(query(id * 2, lo, mid), query(id * 2 + 1, mid + 1, hi));
+		 }
+	 }
+	 int largestRectangleArea(vector<int>& heights) {
+		 if (heights.size() == 0) return 0;
+		 for (int i = 0; i < heights.size(); i++) kk[i] = heights[i];
+		 int ans = 0;
+		 build(1, 0, heights.size() - 1);
+		 for (int i = 0; i < heights.size(); i++) {
+			 for (int j = i; j < heights.size();j++) {
+				 int m = query(1, i, j);
+				 ans = max(ans, m*(j - i + 1));
+				/* cout << i << " " << " " << j << " the min is " << m << " ";
+				 
+				 
+				 cout << "mul is  " << m*(j - i + 1) << endl;*/
+			}
+		 }
+		 return ans;
+	 }
+ };
