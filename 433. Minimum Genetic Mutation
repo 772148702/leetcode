@@ -1,0 +1,48 @@
+class Solution {
+ public:
+	 int dis(string a, string b) {
+		 int len = a.size();
+		 if (len != b.size()) return 0;
+		 int ans = 0;
+		 for (int i = 0; i < len; i++) {
+			 if (a[i] != b[i]) ans++;
+		 }
+		 return ans;
+	 }
+	 int minMutation(string start, string end, vector<string>& bank)
+	 {
+		 set<string> s(bank.begin(), bank.end());
+		 if (s.count(end) == false) return -1;
+		 if (s.count(start) == false) {
+			 bank.push_back(start);
+		 }
+		 int lo = find(bank.begin(), bank.end(), start) - bank.begin();
+		 int tar = find(bank.begin(), bank.end(), end) - bank.begin();
+		 int le = bank.size();
+		 vector < vector<int >> M(le, vector<int>(le, -1));
+		 for (int i = 0; i < le; i++)
+			 for (int j = 0; j < le; j++)
+			 {
+				 if (i == j)
+				 {
+					 M[i][j] = 0; continue;
+				 }
+				 if (dis(bank[i], bank[j]) == 1)
+				 {
+					 M[i][j] = 1;
+				 }
+			 }
+				 for (int k = 0; k < le; k++)
+					 for (int i = 0; i < le; i++)
+						 for (int j = 0; j < le; j++) {
+							 if (M[i][k] != -1 && M[k][j] != -1) {
+								 if (M[i][j] == -1) M[i][j] = M[i][k] + M[k][j];
+								 else M[i][j] = min(M[i][j], M[i][k] + M[k][j]);
+							 }
+						 }
+				 
+			
+		 return M[lo][tar];
+	 }
+
+	 };
