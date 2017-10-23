@@ -1,0 +1,109 @@
+最开始看错了题目，主意题目中说的是BST,右子树的值一定大于左子树和根节点的值。 
+class Solution {
+public:
+    int cur=0;
+    TreeNode* convertBST(TreeNode* root) {
+        f(root);
+        return root;
+    }
+    void f(TreeNode* root) {
+        if(root==0) return;
+        f(root->right);
+        root->val = (cur+=root->val);
+        f(root->left);
+    }
+    
+};
+超时的版本。。。。。
+class Solution {
+public:
+	set<int> V;
+	TreeNode* convertBST(TreeNode* root) {
+		visit(root);
+		return f(root);
+
+	}
+	TreeNode * f(TreeNode* root) {
+		if (root == 0) return NULL;
+
+		int ans = root->val;
+		TreeNode * nr = new TreeNode(ans);
+		auto it = upper_bound(V.begin(), V.end(), root->val);
+		for (; it != V.end(); it++) {
+			nr->val += *it;
+		}
+		nr->left = convertBST(root->left);
+		nr->right = convertBST(root->right);
+		return nr;
+	}
+	void visit(TreeNode* root) {
+		if (root == 0) return;
+		V.insert(root->val);
+		visit(root->left);
+		visit(root->right);
+	}
+};
+
+
+
+#include "stdafx.h"
+#include <vector>
+#include <iostream>
+#include <map>
+#include <set>
+#include <algorithm>
+
+using namespace std;
+ struct TreeNode {
+     int val;
+     TreeNode *left;
+     TreeNode *right;
+     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ };
+一个奇怪的错误的版本
+ class Solution {
+ public:
+	 map<int, int> V;
+	 TreeNode* convertBST(TreeNode* root) {
+		 visit(root);
+		 for (auto it = V.begin(); it != V.end(); it++) {
+			 cout << it->first << " " << it->second << endl;
+		 }
+		 return f(root);
+
+	 }
+	 TreeNode * f(TreeNode* root) {
+		 if (root == 0) return NULL;
+
+		 int ans = root->val;
+		 TreeNode * nr = new TreeNode(ans);
+		 ans += V[root->val];
+
+		 nr->left = convertBST(root->left);
+		 nr->right = convertBST(root->right);
+		 return nr;
+	 }
+	 void visit(TreeNode* root) {
+		 if (root == 0) return;
+		 if (V.count(root->val) == 0) V[root->val] = 0;
+		 for (auto it : V) {
+			 if (it.first < root->val) {
+				 it.second += root->val;
+				 //cout << it.first << " " << it.second << endl;;
+			 }
+		 }
+		 
+		 visit(root->left);
+		 visit(root->right);
+	 }
+ };
+
+int main()
+{
+	Solution tmp;
+	TreeNode * root = new TreeNode(5);
+	root->left = new TreeNode(2);
+	root->right = new TreeNode(13);
+	tmp.convertBST(root);
+    return 0;
+}
