@@ -1,0 +1,22 @@
+ 开始的bug是应为在f1里面递归调用f1的时候写成了myPow。
+ 从這道题要明白条件断点的运用。
+ class Solution {
+ public:
+	 double myPow(double x, int n) {
+		 if (n<0) return f1(1 / x, -n);
+		 if (n == 0) return 1;
+		 return f1(x, n);
+
+	 }
+	 double f1(double x, int n) {
+		 if (n == 0) return 1;
+		 double t = f1(x, n / 2);
+		 t = t*t;
+		 if (n % 2 == 0) {
+			 return t;
+		 }
+		 else {
+			 return t*x;
+		 }
+	 }
+ };
