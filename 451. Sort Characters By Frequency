@@ -1,0 +1,43 @@
+string.append(n,c)可以用来简化
+还有一种写法是利用桶排序，将重复的次数作为下表来索引字符串。
+我的写法：
+class st {
+public:
+	char ch;
+	int cnt;
+};
+ bool cmp(const st s1, const st s2)  {
+	return s1.cnt>s2.cnt;
+}
+class Solution {
+public:
+	
+	string frequencySort(string s) {
+		vector<st> V;
+		map<int, st> M;
+		for (int i = 0; i<s.size(); i++) {
+			if (M.count(s[i]) != 0) {
+				M[s[i]].cnt++;
+			}
+			else {
+				M[s[i]].ch = s[i];
+				M[s[i]].cnt = 1;
+			}
+		}
+		for (auto tmp : M) {
+			V.push_back(tmp.second);
+		}
+		sort(V.begin(), V.end(), cmp);
+		char tmp[1000000];
+		int k = 0;
+		for (int i = 0; i<V.size(); i++) {
+			while (V[i].cnt > 0) {
+				tmp[k++] = V[i].ch;
+				V[i].cnt--;
+			 }
+		}
+		tmp[k] = '\0';
+		string ans(tmp);
+		return ans;
+	}
+};
