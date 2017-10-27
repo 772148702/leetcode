@@ -1,0 +1,23 @@
+位运算
+class Solution {
+public:
+
+	int maxProduct(vector<string>& words) {
+		int len = words.size();
+		int ans = 0;
+		int * val = new int[len];
+		for (int i = 0; i<len; i++) {
+			val[i] = 0;
+			for (int j = 0; j<words[i].size(); j++) {
+				val[i] = val[i] | (1 << (words[i][j] - 'a'));
+			}
+		}
+		for (int i = 0; i<len; i++)
+			for (int j = i + 1; j<len; j++) {
+				int len1 = words[i].size();
+				int len2 = words[j].size();
+				if ((val[i] & val[j]) == 0) ans = max(ans, len1*len2);
+			}
+		return ans;
+	}
+};
