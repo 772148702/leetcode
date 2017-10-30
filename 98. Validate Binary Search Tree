@@ -1,0 +1,31 @@
+能不能从递归的角度来直接判断呢
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> V;
+    bool isValidBST(TreeNode* root) {
+        if(root==0) return true;
+        f(root);
+        for (int i=1;i<V.size();i++) {
+            if(V[i]<=V[i-1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    void f(TreeNode* root) {
+         if(!root) return;
+         
+        f(root->left);
+        V.push_back(root->val);
+        f(root->right);
+    }
+};
