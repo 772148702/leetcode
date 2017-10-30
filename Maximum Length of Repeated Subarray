@@ -1,0 +1,19 @@
+直接用vector回超出空间限制，而用数组不会。
+class Solution {
+    int dp[1001][1001];
+public:
+    int findLength(vector<int>& A, vector<int>& B) {
+        int len1 = A.size();
+        int len2 = B.size();
+        if(len1==0||len2==0) return 0;
+        int ans = 0;
+        for (int i=1;i<=len1;i++)
+            for(int j=1;j<=len2;j++) {
+                if(A[i-1]==B[j-1]) {
+                    dp[i][j]=max(dp[i][j],dp[i-1][j-1]+1);
+                    ans = max(ans,dp[i][j]);
+                }
+            }
+        return ans;
+    }
+};
