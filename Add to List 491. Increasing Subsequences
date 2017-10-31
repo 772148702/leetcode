@@ -1,0 +1,26 @@
+也亏是白盒测试。
+
+class Solution {
+ public:
+	 set<vector<int>> S;
+	 int vis[110];
+	 vector<vector<int>> findSubsequences(vector<int>& nums) {
+		 vector<int> t;
+		 f(t, nums.size(), nums,-1);
+		 vector<vector<int>> ans(S.begin(), S.end());
+		 return ans;
+	 }
+	 void f(vector<int> cur, int n, vector<int> nums,int k) {
+		 for (int i = k+1; i<n; i++) {
+			 if (vis[i] == 1) continue;
+			 if (cur.size()!=0&&cur.back()>nums[i]) continue;
+			 vis[i] = 1;
+			 
+			cur.push_back(nums[i]);
+			 if (cur.size()>=2&&S.count(cur) == 0) S.insert(cur);
+			 f(cur, n, nums,i);
+			 cur.pop_back();
+			 vis[i] = 0;
+		 }
+	 }
+ };
