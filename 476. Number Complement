@@ -1,0 +1,10 @@
+mask的补码为1111111
+还是不懂原理
+class Solution {
+public:
+    int findComplement(int num) {
+        unsigned mask = ~0;
+        while (num & mask) mask <<= 1;
+        return ~mask & ~num;
+    }
+};
