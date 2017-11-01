@@ -1,0 +1,19 @@
+利用了贪心的算法
+按照末位置来对气球排序，我们射爆气球都在气球的末位置，这样的话能够最小化arrow。
+在记录这个位置。对下一个判断。
+class Solution {
+public:
+    int findMinArrowShots(vector<pair<int, int>>& points) {
+        sort(points.begin(),points.end(),cmp);
+        int cur = INT_MIN,ans = 0;
+        for(int i=0;i<points.size();i++) {
+            if(cur!=INT_MIN&&cur>=points[i].first) continue;
+            cur = points[i].second;
+            ans++;
+        }
+        return ans;
+    }
+    static bool cmp(pair<int,int>& p1,pair<int,int>& p2) {
+        return p1.second==p2.second?p1.first<p2.first:p1.second<p2.second;
+    }
+};
