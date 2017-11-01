@@ -1,0 +1,49 @@
+思路：用一个标志flag确定每次读取的值是从左读取还是从右边读取。
+其余的思路和层次遍历是一样的。
+/* 
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        
+        vector<TreeNode*> tmp;
+        vector<TreeNode*> tmp1;
+        vector<vector<int>> ans;
+        if(root==0) return ans;
+        tmp.push_back(root);
+        int flag = 1;
+        while(tmp.size()!=0) {
+            vector<int> tans;
+            
+                for(int i=0;i<tmp.size();i++) {
+                    if(tmp[i]->left!=0)
+                      tmp1.push_back(tmp[i]->left);
+                    if(tmp[i]->right!=0)
+                     tmp1.push_back(tmp[i]->right);
+   
+                }
+         
+            if(flag==1) {
+                for(int i=0;i<tmp.size();i++) {
+                    tans.push_back(tmp[i]->val);
+   
+                }
+            } else {
+                for(int i=tmp.size()-1;i>=0;i--) {
+                    tans.push_back(tmp[i]->val);
+                }
+            }
+            flag = -1*flag;
+            ans.push_back(tans);
+            tmp = tmp1;
+            tmp1.clear();
+        }
+        return ans;
+    }
+};
