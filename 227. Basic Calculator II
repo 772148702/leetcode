@@ -5,6 +5,77 @@
 遇到运算符号的时候，比较与栈顶的符号的优先级。
 1）如果栈顶的优先级>=该符号的优先级，我们就可以计算栈顶符号的优先级
 2)如果栈顶符号的优先级低于该符号的优先级，我们要将该符号入栈
+修正bug后的版本：
+  class Solution {
+  public:
+	  int f(char op, int a1, int a2) {
+	
+		  if (op == '+') {
+			  return a1 + a2;
+		  }
+		  if (op == '*') {
+			  return a1*a2;
+		  }
+		  if (op == '/') {
+			  return a1 / a2;
+		  }
+		  if (op == '-') {
+			  return a1 - a2;
+		  }
+	  }
+	
+	  int calculate(string s) {
+		  stack<int> st;
+		  stack<char> op;
+		  map<char, int> M = { {'+',1},{'-',1},{'*',2 },{'/',2} };
+		  int tmp = 0;
+		  for (int i = 0; i<s.size();) {
+			  int flag = 0;
+			  while (isdigit(s[i])) {
+				  tmp = tmp * 10 + s[i] - '0';
+				i++;
+				  flag = 1;
+			  } 
+			  if (flag) {
+				  st.push(tmp);
+				  tmp = 0;
+				  continue;
+			  }
+			  if (s[i] == ' '){i++; continue;}
+			  if (op.empty()) {
+				  op.push(s[i++]);
+				  continue;
+			  }
+			  char optmp = op.top();
+			  while (M[optmp] >= M[s[i]]) {
+				  op.pop();
+				  int a2 = st.top();
+				  st.pop();
+				  int a1 = st.top();
+				  st.pop();
+				  st.push(f(optmp, a1, a2));
+                  if(op.empty()) break;
+                  optmp = op.top();
+			  }
+			 
+		     op.push(s[i]);
+			  i++；
+		  }  
+		  while(!op.empty())
+		  {
+			  char optmp = op.top();
+			  op.pop();
+			  int a2 = st.top();
+			  st.pop();
+			  int a1 = st.top();
+			  st.pop();
+			  st.push(f(optmp, a1, a2));
+
+		  }
+          
+		  return st.top();
+	  }
+  };
 我的程序：结束的地方还是有bug 
   class Solution {
   public:
