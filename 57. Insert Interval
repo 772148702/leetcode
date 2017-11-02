@@ -1,0 +1,67 @@
+ vector<Interval> insert(vector<Interval>& intervals, Interval newInterval) {
+    vector<Interval> ret;
+    auto it = intervals.begin();
+    for(; it!=intervals.end(); ++it){
+		if(newInterval.end < (*it).start) //all intervals after will not overlap with the newInterval
+			break; 
+		else if(newInterval.start > (*it).end) //*it will not overlap with the newInterval
+			ret.push_back(*it); 
+        else{ //update newInterval bacause *it overlap with the newInterval
+            newInterval.start = min(newInterval.start, (*it).start);
+            newInterval.end = max(newInterval.end, (*it).end);
+        }	
+    }
+    // don't forget the rest of the intervals and the newInterval
+	ret.push_back(newInterval);
+	for(; it!=intervals.end(); ++it)
+		ret.push_back(*it);
+	return ret;
+}
+ 删除的那里还是有一些错误的。
+ class Solution {
+ public:
+	 vector<Interval> insert(vector<Interval>& intervals, Interval newInterval) {
+		 vector<Interval>::iterator p1 = intervals.end();
+		 vector<Interval>::iterator p2 = intervals.end();;
+		 vector<Interval> ans;
+		 int flag = 0;
+		 for (auto it = intervals.begin(); it != intervals.end(); it++) {
+			 if (flag == true) {
+				 ans.push_back(*it);
+			 }
+			 if (newInterval.start <= it->start&&newInterval.end >= it->end) {
+				 continue;
+			 }
+			 if (newInterval.start>it->start&&newInterval.end<it->end) {
+				 flag = 1;
+
+			 }
+			 if (newInterval.start>it->start&&newInterval.start<it->end&&newInterval.end>it->end) {
+				 ans.push_back(*it);
+				 if (p1 == intervals.end()) p1 = it;
+				 continue;
+			 }
+			 if (newInterval.end>it->start&&newInterval.end<it->end&&it->start>newInterval.start) {
+				 ans.push_back(*it);
+				 p2 = it;
+				 continue;
+			 }
+			 ans.push_back(*it);
+		 }
+		 if (p1!= intervals.end()&&p2!= intervals.end()) {
+			 p1->end = p2->end;
+			 ans.erase(p2);
+			 return ans;
+		 }
+		 if (p1!=intervals.end()) {
+			 p1->end = newInterval.end;
+			 return ans;
+		 }
+		 if (p2!=intervals.end()) {
+			 p2->start = newInterval.start;
+			 return ans;
+		 }
+		 ans.push_back(newInterval);
+		 return ans;
+	 }
+ };
