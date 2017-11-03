@@ -1,0 +1,36 @@
+Insight:My idea is straightforward,let cur1,cur2, two points point to current point1 and point2 
+.The pointer prev point the the previous Node,so we can exchange two node when we get the two Node.
+When we exit the loop,we need to veritfy the the exit condition. 
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        ListNode* p = head;
+        if(p==0) return head;
+        ListNode* cur1=NULL,*cur2=NULL,*prev=NULL;
+        while(p&&p->next) {
+            prev = cur1;
+            cur1 = p;
+            cur2 = p->next;
+            p=p->next->next;
+            if(prev)
+            prev->next = cur2;
+            else head=cur2;
+            cur2->next = cur1;
+            cur1->next = NULL;
+        }
+        if(p&&p!=head) cur1->next =p; 
+        return head;
+    }
+};
+the idea from other people is very smart.
+The method using recusive function make you can handle the question easily and safely.
+public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        
+        ListNode newhd = head.next;
+        head.next = swapPairs(newhd.next);
+        newhd.next = head;
+        return newhd;
+}
