@@ -1,0 +1,31 @@
+This problem labled difficulty,is hard to me.
+
+class Solution {
+  public:
+	  string removeDuplicateLetters(string s) {
+		  map<int, int> M;
+		  for (int i = 0; i<s.size(); i++)
+		  {
+			  if (M.count(s[i]) == 0) {
+				  M[s[i]] = 1;
+			  }
+			  else {
+				  M[s[i]]++;
+			  }
+		  }
+	    int vis[266];
+        memset(vis,0,sizeof(vis));
+        string ans = "0";
+        for (char ch:s) {
+            M[ch]--;
+            if(vis[ch]==1) continue;
+            while(ch<ans.back()&&M[ans.back()]>0) {
+                vis[ans.back()]=0;
+                ans.pop_back();
+            }
+            ans+=ch;
+            vis[ch]=1;
+        }
+          return ans.substr(1);
+      }
+  };
