@@ -1,0 +1,24 @@
+這个题意真是难以理解，居然是每步都要遵循前n-1字符必须是在字典中出现的。
+ class Solution {
+ public:
+	 string longestWord(vector<string>& words) {
+		 if (words.size() == 0) return "";
+		 string ans = "";
+		 sort(words.begin(), words.end());
+		 unordered_set<string> M;
+		 for (string s : words) {
+			 string tmp = s.substr(0, s.size() - 1);
+
+			 if (tmp.size() == 0 || M.count(tmp) == 1) {
+				 if (ans.size()<s.size()) {
+					 ans = s;
+				 }
+				 if (ans.size() == s.size() && ans >= s) {
+					 ans = s;
+				 }
+				 M.insert(s);
+			 }
+		 }
+		 return ans;
+	 }
+ };
