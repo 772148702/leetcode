@@ -1,0 +1,81 @@
+   python语法的简单，代码行数很少，极大地提高了效率
+   class Account:
+        def __init__(self, l):
+            self.name = l[0]
+            self.emails = l[1:]
+
+        def __hash__(self):
+            return hash(str(self))
+
+        def __eq__(self, other):
+            return self.name == other.name and len(self.emails) == len(other.emails) \
+                   and set(self.emails) == set(other.emails)
+
+    def accountsMerge(self, accounts):
+        accounts = [self.Account(a) for a in accounts]
+        email_dict, visited, finalres = defaultdict(set), set(), []
+
+        for acc in accounts:
+            for email in acc.emails:
+                email_dict[email].add(acc)
+
+        for acc in accounts:
+            if acc in visited: continue
+            res = set()
+            self.dfs(acc, email_dict, visited, res)
+            finalres.append([acc.name] + sorted(res))
+        return finalres
+
+    def dfs(self, acc, email_dict, visited, res):
+        if acc in visited: return
+        visited.add(acc)
+        for email in acc.emails:
+            res.add(email)
+            for a in email_dict[email]:
+                self.dfs(a, email_dict, visited, res)
+  c++:
+ class Solution {
+ public:
+	 vector<vector<string>> accountsMerge(vector<vector<string>>& acc) {
+		 unordered_map<string, vector<int>> mailToAcc;
+		 unordered_map<int, vector<string>> accToMail;  //便于直接可以遍历邮箱
+		 vector<vector<string>> ans;
+		 for (int i = 0; i<acc.size(); i++) {
+			 for (int j = 1; j<acc[i].size(); j++)
+			 {
+				 mailToAcc[acc[i][j]].push_back(i);
+				 accToMail[i].push_back(acc[i][j]);
+			 }
+		 }
+		 queue<int> user;
+		 int n = acc.size();
+		 vector<int> vis(n, 0);
+		 for (int i = 0; i<n; i++)
+		 {
+			 if (vis[i] == 1) continue;
+			 user.push(i);
+			 set<string> curMail;
+			 while (!user.empty()) {
+				 int cur = user.front();
+				 user.pop();
+				 vis[cur] = 1;
+				 for (auto mail : accToMail[cur]) {
+					 for (auto k : mailToAcc[mail]) {
+						 if (vis[k] == 0) {
+							 vis[k] = 1;
+							 user.push(k);
+						 }
+					 }
+					 curMail.insert(mail);
+				 }
+			 }
+			 vector<string> tmp;
+			 tmp.push_back(acc[i][0]);
+			 for (auto s : curMail) {
+				 tmp.push_back(s);
+			 }
+			 ans.push_back(tmp);
+		 }
+		 return ans;
+	 }
+ };
