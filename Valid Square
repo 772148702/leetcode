@@ -1,0 +1,20 @@
+vector<int> operator-(const vector<int>& lhs, const vector<int>& rhs) {
+    return {lhs[0] - rhs[0], lhs[1] - rhs[1]};
+}
+int operator*(const vector<int>& lhs, const vector<int>& rhs) {
+    return lhs[0] * rhs[0] + lhs[1] * rhs[1];
+}
+
+class Solution {
+public:
+    bool validateSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        return (p1 - p2) * (p1 - p2) != 0                           // the first side is not zero
+            && (p1 - p2) * (p1 - p2) == (p2 - p3) * (p2 - p3)       
+            && (p2 - p3) * (p2 - p3) == (p3 - p4) * (p3 - p4)       // we have three equal non-zero sides.
+            && (p1 - p2) * (p2 - p3) == 0                           // with two more right angle,
+            && (p2 - p3) * (p3 - p4) == 0;                           // a square is guaranteed
+    }
+    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        return validateSquare(p1, p2, p3, p4) || validateSquare(p1, p2, p4, p3) || validateSquare(p1, p3, p2, p4);
+    }
+};
