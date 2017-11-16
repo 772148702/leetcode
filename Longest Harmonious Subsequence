@@ -1,0 +1,30 @@
+感觉简单题更难。。
+class Solution {
+public:
+	int findLHS(vector<int>& a) {
+		int len = a.size();
+		int ans = 0;
+		if (len == 0) return 0;
+		sort(a.begin(), a.end());
+		int pre = -1;
+		for (int i = 0; i < len; )
+		{
+			int j = i + 1;
+			int tmp = 1;
+			while (j<len&&a[i] == a[j]) {
+				j++;
+			}
+			pre = j;
+			int flag = 0;
+			while (j<len&&a[j] == a[i] + 1) {
+				flag = 1;
+				j++;
+			}
+			if(flag)
+			ans = max(ans, j - i);
+			i = pre;
+
+		}
+	    return ans;
+	}
+};
