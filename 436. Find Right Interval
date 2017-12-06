@@ -1,0 +1,52 @@
+ 贪心加上排序的系列
+ 当然这个类可以不用封装的用lambda或者仿函数也可以的。
+ class Solution {
+ public:
+	 struct test {
+		 Interval inter;
+		 int lo;
+		 bool operator <( test v2) {
+		 return inter.start < v2.inter.start || (inter.start == v2.inter.start&&inter.end < v2.inter.end);
+	 }
+	 };
+
+	 vector<int> findRightInterval(vector<Interval>& intervals) {
+		 vector<test> vk;
+		 int cnt = 0;
+		 for (auto k : intervals) {
+			 test h;
+			 h.inter = k;
+			 h.lo = cnt++;
+			 vk.push_back(h);
+		 }
+		 sort(vk.begin(), vk.end());
+		 int len = intervals.size();
+		 vector<int> ans(len, -1);
+		 for (int i = 0; i < len; i++)
+			 for (int j = i + 1; j < len; j++) {
+				 if (vk[i].inter.end <= vk[j].inter.start) {
+					 ans[vk[i].lo] = vk[j].lo;
+					 break;
+				 }
+				
+			 }
+		 return ans;
+	 }
+ };
+利用容器的lower_bound函数找到上届。
+ class Solution {
+public:
+    vector<int> findRightInterval(vector<Interval>& intervals) {
+        map<int, int> hash;
+        vector<int> res;
+        int n = intervals.size();
+        for (int i = 0; i < n; ++i)
+            hash[intervals[i].start] = i;
+        for (auto in : intervals) {
+            auto itr = hash.lower_bound(in.end);
+            if (itr == hash.end()) res.push_back(-1);
+            else res.push_back(itr->second);
+        }
+        return res;
+    }
+};
