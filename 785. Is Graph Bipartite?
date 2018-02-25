@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        vector<int> v(graph.size(),0);
+        queue<int> Q;
+        for (int i=0;i<graph.size();i++) {
+            if(v[i]) continue;
+            if(v[i]==0) {
+                v[i] = 1;
+                Q.push(i);
+            }
+            while(!Q.empty()) {
+                int tmp = Q.front();
+                Q.pop();
+                for (int j=0;j<graph[tmp].size();j++) {
+                    int other = graph[tmp][j];
+                    if(v[other]==v[tmp]) {
+                        return false;
+                    }
+                    if(v[other]==0) {
+                        v[other] = -v[tmp];
+                        Q.push(other);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
