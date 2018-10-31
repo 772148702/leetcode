@@ -1,0 +1,89 @@
+java代码：
+主要熟悉java的库：
+String charAt indexOf subString
+String append
+Character.isDigit  isAlphabetic
+本题考点：
+分治算法，题并不难，是一个括号匹配的扩展题。
+分为嵌套情况和并列情况
+class Solution {
+    public String decodeString(String s) {
+       return  work(s,0).toString();
+    }
+    StringBuilder work(String s,int cur)
+    {
+        int first=s.indexOf('[',cur);
+        if(first==-1) {
+            return  new StringBuilder(s.substring(cur));
+        }
+
+        int from = first+1;
+        int ans = 1;
+        StringBuilder tmp = new StringBuilder();
+        int curr = cur;
+        while( Character.isAlphabetic(s.charAt(curr)))
+        {
+            curr++;
+        }
+        String tmp12 = s.substring(cur,curr);
+        tmp.append(tmp12);
+        int scale = Integer.parseInt(s.substring(curr,first));
+        while(from<s.length()){
+            if(s.charAt(from)=='[') ans++;
+            if(s.charAt(from)==']') ans--;
+            if(ans==0) break;
+            from++;
+        }
+
+        String tmp1 = s.substring(first+1,from);
+        StringBuilder tt = work(tmp1, 0);
+        while(scale>0) {
+            tmp.append(tt);
+            scale--;
+        }
+
+        if(from+1<s.length()) {
+            tmp.append(work(s,from+1));
+        }
+        return tmp;
+    }
+}
+
+答案：
+很巧妙的利用栈来实现递归的思想，主要是后缀表达式计算的扩展。
+public class Solution {
+    public String decodeString(String s) {
+        String res = "";
+        Stack<Integer> countStack = new Stack<>();
+        Stack<String> resStack = new Stack<>();
+        int idx = 0;
+        while (idx < s.length()) {
+            if (Character.isDigit(s.charAt(idx))) {
+                int count = 0;
+                while (Character.isDigit(s.charAt(idx))) {
+                    count = 10 * count + (s.charAt(idx) - '0');
+                    idx++;
+                }
+                countStack.push(count);
+            }
+            else if (s.charAt(idx) == '[') {
+                resStack.push(res);
+                res = "";
+                idx++;
+            }
+            else if (s.charAt(idx) == ']') {
+                StringBuilder temp = new StringBuilder (resStack.pop());
+                int repeatTimes = countStack.pop();
+                for (int i = 0; i < repeatTimes; i++) {
+                    temp.append(res);
+                }
+                res = temp.toString();
+                idx++;
+            }
+            else {
+                res += s.charAt(idx++);
+            }
+        }
+        return res;
+    }
+}
