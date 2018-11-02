@@ -1,0 +1,35 @@
+这道题以前用c++做过的，现在却又忘记了。。。
+
+
+class Solution {
+  public List<Integer> diffWaysToCompute(String input) {
+        List<Integer> res = new ArrayList<>();
+
+        int m = input.length();
+
+        for (int i=0;i<m;i++)
+        {
+            char tmp = input.charAt(i);
+            if(tmp=='+'||tmp=='-'||tmp=='*')
+            {
+                String left = input.substring(0,i);
+                String right = input.substring(i+1);
+                List<Integer> l = diffWaysToCompute(left);
+                List<Integer> r = diffWaysToCompute(right);
+                for (int tmp1:l)
+                    for (int tmp2: r)
+                    {
+                        if(tmp=='+') res.add(tmp1+tmp2);
+                        if(tmp=='-') res.add(tmp1-tmp2);
+                        if(tmp=='*') res.add(tmp1*tmp2);
+                    }
+            }
+        }
+        if(res.size()==0) res.add(Integer.parseInt(input));
+
+
+        return res;
+
+
+    }
+}
