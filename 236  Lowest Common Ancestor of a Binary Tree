@@ -1,0 +1,73 @@
+
+
+我是用的遍历的方法，应该还是有简单的方法。
+
+ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+        List<TreeNode> list1 = new ArrayList<>();
+        List<TreeNode> list2 = new ArrayList<>();
+        preOrder(root,list1,p);
+        preOrder(root,list2,q);
+        int m = list1.size();
+        int n = list2.size();
+
+        for(int i=m-1;i>=0;i--)
+            for (int j=n-1;j>=0;j--)
+            {
+                if(list1.get(i)==list2.get(j)) return list1.get(i);
+            }
+        return null;
+    }
+
+    public boolean preOrder(TreeNode root,List<TreeNode> list,TreeNode target)
+    {
+        if(root==null) return false;
+
+        list.add(root);
+        if(root==target) return true;
+
+
+
+
+        if( preOrder(root.left,list,target)) return true;
+
+        if( preOrder(root.right,list,target)) return true;
+        list.remove(root);
+        return false;
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+
+        String a = new String();
+        test  t = new test();
+        List<Integer> list =  new ArrayList<>();
+
+         TreeNode head = new TreeNode(3);
+
+        TreeNode head1 = new TreeNode(5);
+        TreeNode head2 = new TreeNode(1);
+        head.left = head1;
+        head.right = head2;
+
+
+        TreeNode head3 = new TreeNode(6);
+        TreeNode head4 = new TreeNode(2);
+        TreeNode head5 = new TreeNode(0);
+        TreeNode head6 = new TreeNode(8);
+        head1.left = head3;
+        head1.right=head4;
+
+        head2.left = head5;
+        head2.right=head6;
+
+
+
+        TreeNode head7 = new TreeNode(5);
+        TreeNode head8 = new TreeNode(1);
+
+        head4.left = head7;
+        head4.right = head8;
+        System.out.println(t.lowestCommonAncestor(head,head1,head2).val);
+    }
